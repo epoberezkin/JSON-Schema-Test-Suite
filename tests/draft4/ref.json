@@ -323,5 +323,29 @@
                 "valid": false
             }
         ]
+    },
+    {
+        "description": "internal hash ID without root ID",
+        "schema": {
+            "definitions": {
+                "int": {
+                    "id": "#int",
+                    "type": "integer"
+                }
+            },
+            "allOf": [{"$ref": "#int"}]
+        },
+        "tests": [
+            {
+                "description": "valid",
+                "data": 1,
+                "valid": true
+            },
+            {
+                "description": "invalid",
+                "data": "foo",
+                "valid": false
+            }
+        ]
     }
 ]
