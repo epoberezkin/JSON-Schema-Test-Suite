@@ -528,5 +528,35 @@
                 "valid": false
             }
         ]
+    },
+    {
+        "description": "refs use correct base URI",
+        "schema": {
+            "definitions": {
+                "int": {"$ref": "http://localhost:1234/integer.json"},
+                "str": {"type": "string"}
+            },
+            "anyOf": [
+                {"$ref": "#/definitions/int"},
+                {"$ref": "#/definitions/str"}
+            ]
+        },
+        "tests": [
+            {
+                "description": "valid string",
+                "data": "foo",
+                "valid": true
+            },
+            {
+                "description": "valid number",
+                "data": 1,
+                "valid": true
+            },
+            {
+                "description": "invalid object",
+                "data": {},
+                "valid": false
+            }
+        ]
     }
 ]
