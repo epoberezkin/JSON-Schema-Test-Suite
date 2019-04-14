@@ -347,5 +347,154 @@
                 "valid": false
             }
         ]
+    },
+    {
+        "description": "root pointer ref in ref",
+        "schema": {
+            "definitions": {
+                "arr": {
+                    "type": "array",
+                    "items": {"$ref": "#"}
+                }
+            },
+            "type": "object",
+            "properties": {
+                "name": {"type": "string"},
+                "children": {"$ref": "#/definitions/arr"}
+            }
+        },
+        "tests": [
+            {
+                "description": "valid",
+                "data": {
+                    "name": "foo",
+                    "children": [
+                        {"name": "bar"},
+                        {
+                            "name": "baz",
+                            "children": [
+                                {"name": "1"},
+                                {"name": "2"}
+                            ]
+                        }
+                    ]
+                },
+                "valid": true
+            },
+            {
+                "description": "invalid 1",
+                "data": {
+                    "name": "foo",
+                    "children": [
+                        {"name": "bar"},
+                        {"name": 1}
+                    ]
+                },
+                "valid": false
+            },
+            {
+                "description": "invalid 2",
+                "data": {
+                    "name": "foo",
+                    "children": [
+                        {"name": "bar"},
+                        {
+                            "name": "baz",
+                            "children": [
+                                {"name": "1"},
+                                {"name": 2}
+                            ]
+                        }
+                    ]
+                },
+                "valid": false
+            }
+        ]
+    },
+    {
+        "description": "root pointer ref in ref in anyOf",
+        "schema": {
+            "definitions": {
+                "orNull": {
+                    "anyOf": [
+                        {"type": "null"},
+                        {"$ref": "#"}
+                    ]
+                }
+            },
+            "type": "object",
+            "properties": {
+                "name": {"type": "string"},
+                "next": {"$ref": "#/definitions/orNull"}
+            }
+        },
+        "tests": [
+            {
+                "description": "valid 1",
+                "data": {
+                    "name": "foo",
+                    "next": null
+                },
+                "valid": true
+            },
+            {
+                "description": "valid 2",
+                "data": {
+                    "name": "foo",
+                    "next": {
+                        "name": "bar",
+                        "next": null
+                    }
+                },
+                "valid": true
+            },
+            {
+                "description": "valid 3",
+                "data": {
+                    "name": "foo",
+                    "next": {
+                        "name": "bar",
+                        "next": {
+                            "name": "baz",
+                            "next": null
+                        }
+                    }
+                },
+                "valid": true
+            },
+            {
+                "description": "invalid 1",
+                "data": {
+                    "name": "foo",
+                    "next": "bar"
+                },
+                "valid": false
+            },
+            {
+                "description": "invalid 2",
+                "data": {
+                    "name": "foo",
+                    "next": {
+                        "name": "bar",
+                        "next": "baz"
+                    }
+                },
+                "valid": false
+            },
+            {
+                "description": "invalid 3",
+                "data": {
+                    "name": "foo",
+                    "next": {
+                        "name": "bar",
+                        "next": {
+                            "name": "baz",
+                            "next": "quux"
+                        }
+                    }
+                },
+                "valid": false
+            }
+        ]
     }
 ]
